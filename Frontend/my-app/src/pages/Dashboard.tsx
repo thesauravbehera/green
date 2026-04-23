@@ -57,7 +57,7 @@ export function Dashboard() {
           >
             <p className="text-emerald-500 font-black uppercase tracking-[0.4em] text-[10px] mb-3">COMMAND TERMINAL v4.0</p>
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter font-['Clash_Display'] leading-none">
-              {t('welcome')}, <span className="text-premium uppercase">{currentUser?.displayName?.split(' ')[0] || 'COLLECTOR'}</span>
+              SALUTATIONS, <span className="text-emerald-400 uppercase">{currentUser?.displayName?.split(' ')[0] || 'GUEST'}</span>
             </h1>
           </motion.div>
           

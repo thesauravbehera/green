@@ -39,11 +39,10 @@ function AppLayout() {
         <Route path="/onboarding" element={<Onboarding />} />
         
         {/* Main Dashboard Routes */}
-        <Route path="/dashboard" element={<NewDashboard />} />
-        <Route path="/dashboard-old" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         
         {/* Core Feature Routes */}
-        <Route path="/my-garden" element={<MyGarden />} />
+        <Route path="/garden" element={<GamificationHub />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/planner" element={<Planner />} />
