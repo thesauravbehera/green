@@ -46,11 +46,14 @@ export function Navigation() {
   };
 
   const navItems = [
-    { label: t('nav_overview'), href: "/", icon: Sparkles },
-    { label: t('nav_dashboard'), href: "/dashboard", icon: LayoutDashboard, protected: true },
-    { label: t('nav_garden'), href: "/garden", icon: Sprout, protected: true },
-    { label: t('nav_community'), href: "/community", icon: Users },
-    { label: t('nav_market'), href: "/marketplace", icon: ShoppingCart }
+    { label: 'Home', href: "/", icon: null },
+    { label: 'Space Analysis', href: "/space-analysis", icon: null },
+    { label: 'Plant Catalog', href: "/plant-catalog", icon: null },
+    { label: 'My Plants', href: "/my-plants", icon: null, protected: true },
+    { label: 'Care Guide', href: "/care-guide", icon: null },
+    { label: 'Community', href: "/community", icon: Users },
+    { label: 'Shop', href: "/shop", icon: ShoppingCart },
+    { label: 'Sell', href: "/sell", icon: ShoppingCart } // We can use Store or similar icon if available, but keeping it simple for now
   ];
 
   const isAdmin = currentUser?.email === 'admin@bloomify.io';
@@ -63,65 +66,47 @@ export function Navigation() {
         scrolled ? "py-2" : "py-6"
       }`}
     >
-      <div className="container mx-auto px-6">
-        <div className={`glass px-6 h-16 rounded-3xl flex items-center justify-between transition-all duration-500 ${
-          scrolled ? "bg-slate-950/60 border-emerald-500/20 shadow-xl backdrop-blur-xl" : "bg-white/5 border-white/5"
+      <div className="container mx-auto px-6 max-w-[1400px]">
+        <div className={`glass px-8 h-16 rounded-full flex items-center justify-between transition-all duration-500 ${
+          scrolled ? "bg-[#020617]/80 border-emerald-500/20 shadow-xl backdrop-blur-xl" : "bg-[#020617] border-white/5"
         }`}>
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#10B981] via-[#0D9488] to-[#0369A1] rounded-2xl flex items-center justify-center transition-all group-hover:rotate-12 group-hover:scale-110 shadow-lg shadow-emerald-500/20">
-              <Leaf className="w-5 h-5 text-white" strokeWidth={2.5} />
+          <Link to="/" className="flex items-center gap-3 group mr-8">
+            <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-emerald-500/20">
+              <Leaf className="w-4 h-4 text-[#020617]" strokeWidth={3} />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white font-['Clash_Display']">
-              BLOOMIFY
+            <span className="text-xl font-bold tracking-tight text-white">
+              Bloomify
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-6 flex-1">
             {navItems.map((item) => {
               if (item.protected && !userLoggedIn) return null;
               const isActive = location.pathname === item.href;
+              const Icon = item.icon;
               
               return (
                 <Link
                   key={item.label}
                   to={item.href}
-                  className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all relative group ${
-                    isActive ? "text-emerald-400" : "text-white/40 hover:text-white"
+                  className={`flex items-center gap-2 text-sm font-medium transition-all relative py-5 ${
+                    isActive ? "text-emerald-400" : "text-white/60 hover:text-white"
                   }`}
                 >
-                  <span className="relative z-10 font-['Clash_Display'] uppercase tracking-widest">{item.label}</span>
+                  {Icon && <Icon className="w-4 h-4" />}
+                  <span>{item.label}</span>
                   {isActive && (
                     <motion.div
                       layoutId="nav-active"
-                      className="absolute inset-0 bg-emerald-500/5 rounded-xl border border-emerald-500/10 -z-10"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-400"
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
                 </Link>
               );
             })}
-            
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all relative group ${
-                  location.pathname === "/admin" ? "text-emerald-400" : "text-emerald-500/60 hover:text-emerald-400"
-                }`}
-              >
-                <span className="relative z-10 font-['Clash_Display'] uppercase tracking-widest flex items-center gap-2">
-                  <ShieldCheck className="w-3 h-3" />
-                  ADMIN
-                </span>
-                {location.pathname === "/admin" && (
-                  <motion.div
-                    layoutId="nav-active"
-                    className="absolute inset-0 bg-emerald-500/10 rounded-xl border border-emerald-500/20 -z-10"
-                  />
-                )}
-              </Link>
-            )}
           </div>
 
           {/* Desktop Right Side */}

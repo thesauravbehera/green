@@ -14,11 +14,13 @@ let subscription = require("./subscription");  // Subscription management
 let ecommerce = require("./ecommerce");  // E-commerce management
 let recommendRouter = require("./routes/recommend");  // Plant recommendation routes
 let chatRouter = require("./routes/chat");  // AI Chat routes
+let externalApisRouter = require("./routes/external_apis"); // Real-time External APIs
 
 let app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api', chatRouter);
+app.use('/api/external', externalApisRouter);
 app.use('/upload', express.static('upload'));
 
 // Request logging middleware

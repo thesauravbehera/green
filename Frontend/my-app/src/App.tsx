@@ -42,24 +42,25 @@ function AppLayout() {
         <Route path="/dashboard" element={<Dashboard />} />
         
         {/* Core Feature Routes */}
-        <Route path="/garden" element={<GamificationHub />} />
+        <Route path="/my-plants" element={<MyGarden />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/planner" element={<Planner />} />
-        <Route path="/ai-assistant" element={<AIAssistant />} />
+        <Route path="/care-guide" element={<AIAssistant />} />
         <Route path="/achievements" element={<Leaderboard />} />
         
         {/* Secondary Routes */}
-        <Route path="/plants" element={<PlantCatalog />} />
-        <Route path="/plants/:id" element={<PlantDetails />} />
+        <Route path="/plant-catalog" element={<PlantCatalog />} />
+        <Route path="/plant-catalog/:id" element={<PlantDetails />} />
         <Route path="/tasks" element={<TasksReminders />} />
         <Route path="/weather" element={<WeatherDashboard />} />
-        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/shop" element={<Marketplace />} />
+        <Route path="/sell" element={<Marketplace />} />
         <Route path="/community" element={<CommunityHub />} />
-        <Route path="/garden" element={<GamificationHub />} />
+        <Route path="/gamification" element={<GamificationHub />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/scanner" element={<ARBalconyScanner />} />
+        <Route path="/space-analysis" element={<ARBalconyScanner />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <Toaster position="bottom-right" theme="dark" />

@@ -267,48 +267,47 @@ export function ARBalconyScanner() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-emerald-950/20 to-slate-950 py-20 px-4">
-      <div className="container mx-auto max-w-7xl">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-            <Camera className="w-4 h-4 text-emerald-400" />
-            <span className="text-emerald-400 text-sm">AR Balcony Scanner (Live Camera)</span>
-          </div>
-          <h1 className="text-5xl mb-4 bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-            Scan Your Balcony Space
-          </h1>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Use your device camera to analyze your balcony environment and get personalized plant recommendations
-          </p>
-        </motion.div>
-
+    <div className="min-h-screen bg-[#020617] pt-32 pb-20 px-6 font-['Inter']">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Main Grid Layout */}
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Camera Interface */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card className="bg-slate-900/50 border-slate-800 backdrop-blur-xl p-6">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl text-white">Camera View</h2>
-                  {scanComplete && (
-                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                      <CheckCircle2 className="w-3 h-3 mr-1" />
-                      Complete
-                    </Badge>
+          
+          {/* LEFT PANEL - Capture Interface */}
+          <div className="bg-[#04100c] border border-emerald-500/10 rounded-[2rem] p-8 flex flex-col h-[600px]">
+            {/* Tabs */}
+            <div className="flex items-center justify-center gap-8 mb-12">
+              <button className="bg-white text-[#020617] px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                Capture
+              </button>
+              <button className="text-emerald-500 font-bold text-sm uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                Upload
+              </button>
+              <button className="text-emerald-500 font-bold text-sm uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                Manual
+              </button>
+            </div>
+
+            {/* Viewport */}
+            <div className="flex-1 relative rounded-2xl overflow-hidden bg-[#020617] border border-emerald-500/5 flex items-center justify-center">
+              
+              {!isCameraActive ? (
+                <div className="text-center flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-2xl border-2 border-emerald-900 flex items-center justify-center mb-6">
+                    <Camera className="w-8 h-8 text-emerald-800" />
+                  </div>
+                  <button 
+                    onClick={startCamera}
+                    className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all flex items-center gap-3 hover:scale-105"
+                  >
+                    Activate AI Lens
+                  </button>
+                  {cameraError && (
+                    <p className="text-red-400 text-sm mt-4 max-w-xs">{cameraError}</p>
                   )}
                 </div>
-
-                {/* Camera Viewport */}
-                <div className="relative aspect-video bg-slate-950 rounded-lg overflow-hidden border-2 border-slate-800">
-                  {/* Video Element */}
+              ) : (
+                <>
                   <video
                     ref={videoRef}
                     autoPlay
@@ -316,282 +315,120 @@ export function ARBalconyScanner() {
                     muted
                     className="absolute inset-0 w-full h-full object-cover"
                   />
-
-                  {/* AR Canvas Overlay */}
                   <canvas
                     ref={canvasRef}
                     className="absolute inset-0 w-full h-full pointer-events-none"
                   />
-
-                  {/* Camera not active overlay */}
-                  {!isCameraActive && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-950">
-                      <div className="text-center">
-                        <Camera className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-                        <p className="text-slate-500 mb-4">Camera is off</p>
-                        <Button
-                          onClick={startCamera}
-                          className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-                        >
-                          <Play className="w-4 h-4 mr-2" />
-                          Start Camera
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Scanning Progress Overlay */}
-                  <AnimatePresence>
-                    {isScanning && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute top-4 left-4 right-4"
-                      >
-                        <div className="bg-slate-900/90 backdrop-blur-xl rounded-lg p-4 border border-emerald-500/30">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-emerald-400 text-sm">Scanning Environment...</span>
-                            <span className="text-white text-sm">{scanProgress}%</span>
+                  
+                  {isScanning && (
+                    <div className="absolute top-6 left-6 right-6">
+                      <div className="bg-[#020617]/80 backdrop-blur-xl rounded-full p-4 border border-emerald-500/30 flex items-center gap-4">
+                        <Scan className="w-5 h-5 text-emerald-400 animate-pulse" />
+                        <div className="flex-1">
+                          <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-400 rounded-full" style={{ width: `${scanProgress}%` }} />
                           </div>
-                          <Progress value={scanProgress} className="h-2 bg-slate-800" />
                         </div>
-                      </motion.div>
+                        <span className="text-white font-bold text-sm font-['Clash_Display']">{scanProgress}%</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4">
+                    {!isScanning ? (
+                      <button 
+                        onClick={startScan}
+                        className="bg-emerald-500 text-[#020617] px-8 py-3 rounded-full font-bold shadow-lg hover:bg-emerald-400 transition-colors"
+                      >
+                        Start Scanning
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={resetScan}
+                        className="bg-[#020617]/80 backdrop-blur border border-emerald-500/30 text-emerald-400 px-6 py-3 rounded-full font-bold hover:bg-emerald-500/10 transition-colors"
+                      >
+                        Reset
+                      </button>
                     )}
-                  </AnimatePresence>
-
-                  {/* Camera Controls Overlay */}
-                  {isCameraActive && (
-                    <div className="absolute bottom-4 left-4 right-4 flex gap-2 justify-center">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={switchCamera}
-                        className="bg-slate-900/90 backdrop-blur-xl border-slate-700"
-                      >
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Switch
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={stopCamera}
-                        className="bg-slate-900/90 backdrop-blur-xl border-slate-700 text-red-400 hover:text-red-400"
-                      >
-                        <X className="w-4 h-4 mr-2" />
-                        Stop
-                      </Button>
-                    </div>
-                  )}
-
-                  {/* Error Message */}
-                  {cameraError && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-950/95">
-                      <div className="text-center p-6">
-                        <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
-                        <p className="text-red-400 mb-4">{cameraError}</p>
-                        <Button onClick={startCamera} variant="outline">
-                          Try Again
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="grid grid-cols-2 gap-3">
-                  {!isScanning ? (
-                    <Button
-                      onClick={startScan}
-                      disabled={!isCameraActive}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 col-span-2"
+                    <button 
+                      onClick={stopCamera}
+                      className="bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-3 rounded-full font-bold hover:bg-red-500/20 transition-colors"
                     >
-                      <Scan className="w-4 h-4 mr-2" />
-                      {isCameraActive ? 'Start Scanning' : 'Enable Camera First'}
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={resetScan}
-                      variant="outline"
-                      className="border-slate-700 col-span-2"
-                    >
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Reset Scan
-                    </Button>
-                  )}
+                      Close
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* RIGHT PANEL - Results / Empty State */}
+          <div className="bg-[#04100c] border border-emerald-500/10 rounded-[2rem] p-8 flex flex-col h-[600px] justify-center items-center relative overflow-hidden">
+            {!scanComplete ? (
+              <div className="text-center z-10 flex flex-col items-center">
+                <div className="w-16 h-16 mb-6 text-emerald-500 flex items-center justify-center">
+                  <Scan className="w-10 h-10" />
                 </div>
-
-                {/* Camera Instructions */}
-                {!isCameraActive && !cameraError && (
-                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                    <h3 className="text-blue-400 text-sm mb-2">📸 Camera Instructions:</h3>
-                    <ul className="text-slate-400 text-xs space-y-1">
-                      <li>• Grant camera permissions when prompted</li>
-                      <li>• Point camera at your balcony space</li>
-                      <li>• Use "Switch" to toggle front/back camera</li>
-                      <li>• Click "Start Scanning" to analyze environment</li>
-                    </ul>
-                  </div>
-                )}
-
-                {/* Permission Help Guide */}
-                {cameraError && (
-                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4">
-                    <h3 className="text-orange-400 text-sm mb-3 flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4" />
-                      How to Enable Camera Access
-                    </h3>
-                    <div className="space-y-3 text-xs text-slate-400">
-                      <div>
-                        <p className="text-orange-300 mb-1">Chrome/Edge:</p>
-                        <p>• Click the camera icon in the address bar</p>
-                        <p>• Select "Allow" and refresh the page</p>
-                      </div>
-                      <div>
-                        <p className="text-orange-300 mb-1">Safari:</p>
-                        <p>• Go to Safari &gt; Settings &gt; Websites &gt; Camera</p>
-                        <p>• Allow access for this site</p>
-                      </div>
-                      <div>
-                        <p className="text-orange-300 mb-1">Firefox:</p>
-                        <p>• Click the lock icon in the address bar</p>
-                        <p>• Find Camera permissions and allow</p>
-                      </div>
-                      <div className="pt-2 border-t border-orange-500/20">
-                        <p className="text-orange-300">Note: Camera requires HTTPS or localhost</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <h3 className="text-xl font-bold text-white mb-2 font-['Clash_Display']">Waiting for Analysis</h3>
+                <p className="text-emerald-500/60 max-w-xs text-sm">
+                  Use the AI Tool to generate space insights
+                </p>
               </div>
-            </Card>
-          </motion.div>
-
-          {/* Results Panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="space-y-6"
-          >
-            {/* Environment Analysis */}
-            <Card className="bg-slate-900/50 border-slate-800 backdrop-blur-xl p-6">
-              <h2 className="text-2xl text-white mb-6">Environment Analysis</h2>
-
-              {scanComplete ? (
-                <div className="space-y-4">
+            ) : (
+              <div className="w-full h-full flex flex-col z-10 animate-in fade-in zoom-in duration-500">
+                <h3 className="text-2xl font-bold text-white mb-8 font-['Clash_Display']">Space Insights</h3>
+                
+                <div className="space-y-4 mb-8">
                   {/* Sunlight */}
-                  <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-lg p-4 border border-yellow-500/20">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Sun className="w-6 h-6 text-yellow-400" />
-                      <div className="flex-1">
-                        <p className="text-white">Sunlight Exposure</p>
-                        <p className="text-xs text-slate-400">Direct & Indirect Light</p>
-                      </div>
-                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
-                        {environmentData.sunlight}%
-                      </Badge>
+                  <div className="bg-[#020617] border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                      <Sun className="w-6 h-6 text-yellow-500" />
                     </div>
-                    <Progress value={environmentData.sunlight} className="h-2 bg-slate-800" />
+                    <div className="flex-1">
+                      <p className="text-white font-bold">Sunlight Exposure</p>
+                      <p className="text-xs text-white/40">Direct & Indirect Light</p>
+                    </div>
+                    <span className="text-xl font-black font-['Clash_Display'] text-yellow-500">{environmentData.sunlight}%</span>
                   </div>
 
                   {/* Space */}
-                  <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-lg p-4 border border-blue-500/20">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Maximize2 className="w-6 h-6 text-blue-400" />
-                      <div className="flex-1">
-                        <p className="text-white">Available Space</p>
-                        <p className="text-xs text-slate-400">Usable Area Detected</p>
-                      </div>
-                      <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                        {environmentData.space}%
-                      </Badge>
+                  <div className="bg-[#020617] border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                      <Maximize2 className="w-6 h-6 text-blue-500" />
                     </div>
-                    <Progress value={environmentData.space} className="h-2 bg-slate-800" />
+                    <div className="flex-1">
+                      <p className="text-white font-bold">Available Area</p>
+                      <p className="text-xs text-white/40">Usable Floor/Shelf Space</p>
+                    </div>
+                    <span className="text-xl font-black font-['Clash_Display'] text-blue-500">{environmentData.space}%</span>
                   </div>
 
                   {/* Airflow */}
-                  <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-lg p-4 border border-emerald-500/20">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Wind className="w-6 h-6 text-emerald-400" />
-                      <div className="flex-1">
-                        <p className="text-white">Air Circulation</p>
-                        <p className="text-xs text-slate-400">Ventilation Quality</p>
-                      </div>
-                      <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                        {environmentData.airflow}%
-                      </Badge>
+                  <div className="bg-[#020617] border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                      <Wind className="w-6 h-6 text-emerald-500" />
                     </div>
-                    <Progress value={environmentData.airflow} className="h-2 bg-slate-800" />
+                    <div className="flex-1">
+                      <p className="text-white font-bold">Air Circulation</p>
+                      <p className="text-xs text-white/40">Ventilation Quality</p>
+                    </div>
+                    <span className="text-xl font-black font-['Clash_Display'] text-emerald-500">{environmentData.airflow}%</span>
                   </div>
                 </div>
-              ) : (
-                <div className="text-center py-12">
-                  <Scan className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-                  <p className="text-slate-500">Start scanning to see analysis</p>
-                </div>
-              )}
-            </Card>
 
-            {/* Recommended Plants */}
-            {scanComplete && (
-              <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/30 backdrop-blur-xl p-6">
-                <h2 className="text-2xl text-white mb-4">Recommended for Your Space</h2>
-                
-                <div className="space-y-3 mb-4">
-                  {plantModels.map((model, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => setSelectedModel(index)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                        selectedModel === index
-                          ? 'bg-emerald-500/20 border-emerald-500/50'
-                          : 'bg-slate-800/30 border-slate-700 hover:border-emerald-500/30'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-slate-950 rounded-lg overflow-hidden border border-slate-800">
-                          <iframe
-                            title={model.name}
-                            src={model.url}
-                            className="w-full h-full scale-150"
-                            style={{ pointerEvents: 'none' }}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-white text-sm truncate">{model.name}</p>
-                          <p className="text-slate-500 text-xs">by {model.author}</p>
-                        </div>
-                        <CheckCircle2 className={`w-5 h-5 ${selectedModel === index ? 'text-emerald-400' : 'text-slate-700'}`} />
-                      </div>
-                    </motion.div>
-                  ))}
+                <div className="mt-auto">
+                  <p className="text-xs text-emerald-500/60 uppercase tracking-widest font-bold mb-4">Recommended Actions</p>
+                  <button className="w-full bg-emerald-500 text-[#020617] py-4 rounded-xl font-bold shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:bg-emerald-400 transition-colors">
+                    View Compatible Plants
+                  </button>
                 </div>
-
-                {/* 3D Preview */}
-                <div className="aspect-video bg-slate-950 rounded-lg overflow-hidden border border-slate-800">
-                  <iframe
-                    title={plantModels[selectedModel].name}
-                    frameBorder="0"
-                    allowFullScreen
-                    mozallowfullscreen="true"
-                    webkitallowfullscreen="true"
-                    allow="autoplay; fullscreen; xr-spatial-tracking"
-                    xr-spatial-tracking="true"
-                    src={plantModels[selectedModel].url}
-                    className="w-full h-full"
-                  />
-                </div>
-
-                <Button className="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">
-                  Add to My Garden
-                </Button>
-              </Card>
+              </div>
             )}
-          </motion.div>
+            
+            {/* Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 blur-[100px] rounded-full pointer-events-none" />
+          </div>
+
         </div>
       </div>
     </div>

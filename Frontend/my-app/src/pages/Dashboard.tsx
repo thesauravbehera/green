@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router';
 import { Sprout, Droplets, Sun, Trophy, Zap, TrendingUp, Calendar, Award, Target, Sparkles, ChevronRight, ArrowUpRight, CheckCircle2, Star, CloudRain } from 'lucide-react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -11,33 +12,79 @@ import { useLanguage } from '../contexts/LanguageContext';
 export function Dashboard() {
   const { currentUser } = useAuth();
   const { t } = useLanguage();
-  const [stats] = useState({
-    plantsOwned: 12,
-    plantsHealthy: 9,
-    wateringStreak: 7,
-    level: 15,
-    xp: 3450,
-    xpToNextLevel: 5000,
-    greenPoints: 18750,
-    achievements: 24,
-    tasksToday: 5,
-    tasksCompleted: 3
+  const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    plantsOwned: 0,
+    plantsHealthy: 0,
+    wateringStreak: 0,
+    level: 1,
+    xp: 0,
+    xpToNextLevel: 1000,
+    greenPoints: 0,
+    achievements: 0,
+    tasksToday: 0,
+    tasksCompleted: 0
   });
 
-  const [todayTasks] = useState([
-    { id: 1, title: 'Water Monstera Complex', reward: 50, completed: true },
-    { id: 2, title: 'Analyze Substrate Moisture', reward: 30, completed: true },
-    { id: 3, title: 'Apply Nutrient Injection #04', reward: 75, completed: true },
-    { id: 4, title: 'Check Monsoon Drainage', reward: 40, completed: false },
-    { id: 5, title: 'Calibrate Solar Exposure', reward: 35, completed: false }
-  ]);
+  const [todayTasks, setTodayTasks] = useState<any[]>([]);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
 
-  const [recentActivity] = useState([
-    { action: 'PROTOCOL INITIATED:', plant: 'TULSI UNIT 01', time: '02:00H AGO', xp: 50 },
-    { action: 'NUTRIENT SYNC:', plant: 'SNAKE PLANT ALPHA', time: '05:00H AGO', xp: 75 },
-    { action: 'MONSOON ALERT:', plant: 'EXCESSIVE HUMIDITY DETECTED', time: '24:00H AGO', xp: 100 },
-    { action: 'HYDRATION LOGGED:', plant: 'ALOE UNIT 1', time: '24:00H AGO', xp: 50 }
-  ]);
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      if (!currentUser?.email) return;
+
+      try {
+        // Fetch My Plants
+        const plantsRes = await fetch(`http://localhost:3001/my-plants?email=${currentUser.email}`);
+        const plants = plantsRes.ok ? await plantsRes.json() : [];
+
+        // Fetch Reminders / Tasks
+        const tasksRes = await fetch(`http://localhost:3001/reminders?email=${currentUser.email}`);
+        const tasks = tasksRes.ok ? await tasksRes.json() : [];
+
+        // Calculate stats based on real data
+        const completedTasks = tasks.filter((t: any) => t.completed).length;
+        
+        setStats({
+          plantsOwned: plants.length,
+          plantsHealthy: plants.length, // Simplified for now
+          wateringStreak: currentUser?.streak || 0,
+          level: Math.max(1, Math.floor((currentUser?.xp || 0) / 1000) + 1),
+          xp: currentUser?.xp || 0,
+          xpToNextLevel: ((Math.floor((currentUser?.xp || 0) / 1000) + 1) * 1000),
+          greenPoints: currentUser?.greenPoints || 0,
+          achievements: currentUser?.achievements?.length || 0,
+          tasksToday: tasks.length,
+          tasksCompleted: completedTasks
+        });
+
+        setTodayTasks(tasks.map((t: any) => ({
+          id: t._id,
+          title: t.task,
+          reward: 50, // Static for now
+          completed: t.completed,
+          plant: t.plant_name
+        })));
+
+        // Mock recent activity based on tasks for now, as there isn't a dedicated activity log endpoint
+        const activities = tasks.filter((t: any) => t.completed).map((t: any) => ({
+          action: 'PROTOCOL COMPLETED:',
+          plant: t.plant_name,
+          time: new Date(t.date || Date.now()).toLocaleTimeString(),
+          xp: 50
+        }));
+        
+        setRecentActivity(activities.length > 0 ? activities : [
+          { action: 'SYSTEM INITIALIZED:', plant: 'NEXUS CORE', time: 'JUST NOW', xp: 10 }
+        ]);
+
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+      }
+    };
+
+    fetchDashboardData();
+  }, [currentUser]);
 
   const plantModels = [
     { url: 'https://sketchfab.com/models/dac370ad6c49465c8613979514beb4f5/embed', name: 'BIO-UNIT 01', health: 95 },
@@ -86,6 +133,42 @@ export function Dashboard() {
           <TacticalStat icon={<Zap className="text-yellow-400" />} label="BIO-POINTS" value={stats.greenPoints.toLocaleString()} sub="+240 TODAY" />
           <TacticalStat icon={<Award className="text-purple-400" />} label="MASTERY" value={stats.level} sub="RANK: S-CLASS" />
         </div>
+
+        {/* Quick Actions / Core Functionalities */}
+        <section className="mb-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold tracking-tight uppercase font-['Clash_Display']">System Modules</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Button onClick={() => navigate('/space-analysis')} className="h-auto py-6 bg-white/5 border border-white/10 hover:border-emerald-500/50 hover:bg-emerald-500/10 rounded-2xl flex flex-col gap-3 group transition-all">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Target className="w-6 h-6 text-emerald-400" />
+              </div>
+              <span className="font-bold tracking-widest text-[10px] uppercase text-white/70 group-hover:text-emerald-400">Space Analysis</span>
+            </Button>
+            
+            <Button onClick={() => navigate('/plant-catalog')} className="h-auto py-6 bg-white/5 border border-white/10 hover:border-blue-500/50 hover:bg-blue-500/10 rounded-2xl flex flex-col gap-3 group transition-all">
+              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Sprout className="w-6 h-6 text-blue-400" />
+              </div>
+              <span className="font-bold tracking-widest text-[10px] uppercase text-white/70 group-hover:text-blue-400">Plant Catalog</span>
+            </Button>
+
+            <Button onClick={() => navigate('/shop')} className="h-auto py-6 bg-white/5 border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 rounded-2xl flex flex-col gap-3 group transition-all">
+              <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Sparkles className="w-6 h-6 text-purple-400" />
+              </div>
+              <span className="font-bold tracking-widest text-[10px] uppercase text-white/70 group-hover:text-purple-400">Shop</span>
+            </Button>
+
+            <Button onClick={() => navigate('/care-guide')} className="h-auto py-6 bg-white/5 border border-white/10 hover:border-yellow-500/50 hover:bg-yellow-500/10 rounded-2xl flex flex-col gap-3 group transition-all">
+              <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Zap className="w-6 h-6 text-yellow-400" />
+              </div>
+              <span className="font-bold tracking-widest text-[10px] uppercase text-white/70 group-hover:text-yellow-400">Care Guide</span>
+            </Button>
+          </div>
+        </section>
 
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Console */}

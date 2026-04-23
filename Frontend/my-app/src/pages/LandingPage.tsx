@@ -3,6 +3,14 @@ import { motion } from "motion/react";
 import { useNavigate } from "react-router";
 import { AuthModal } from "../components/AuthModal";
 import { HeroSectionPremium } from "../components/hero-section-premium";
+import { PremiumFeaturesShowcase } from "../components/premium-features-showcase";
+import { PremiumCapabilitiesSection } from "../components/premium-capabilities-section";
+import { PremiumTestimonialsSection } from "../components/premium-testimonials-section";
+import { PremiumPricingSection } from "../components/premium-pricing-section";
+import { PremiumFinalCTA } from "../components/premium-final-cta";
+import { InteractiveDemoSection } from "../components/interactive-demo-section";
+import { LevelsSection } from "../components/LevelsSection";
+import { Footer } from "../components/footer";
 import { Leaf, Play, ChevronDown, Droplets, Sun, AlertCircle, ArrowUpRight } from "lucide-react";
 
 export function LandingPage() {
@@ -185,6 +193,39 @@ export function LandingPage() {
         </div>
       </motion.div>
       </section>
+
+      {/* Premium Sections with Video Backgrounds & Modern Design */}
+      <div id="features" className="relative z-10">
+        <PremiumFeaturesShowcase />
+      </div>
+      
+      <div className="relative z-10">
+        <PremiumCapabilitiesSection />
+      </div>
+      
+      <div className="relative z-10">
+        <InteractiveDemoSection />
+      </div>
+      
+      <div id="about" className="relative z-10">
+        <LevelsSection />
+      </div>
+      
+      <div className="relative z-10">
+        <PremiumTestimonialsSection />
+      </div>
+      
+      <div className="relative z-10">
+        <PremiumPricingSection />
+      </div>
+      
+      <div className="relative z-10">
+        <PremiumFinalCTA />
+      </div>
+      
+      <div className="relative z-10">
+        <Footer />
+      </div>
 
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </main>
