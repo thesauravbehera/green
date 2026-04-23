@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Navigation } from "./components/navigation";
 import { LandingPage } from "./pages/LandingPage";
 import { Dashboard } from "./pages/Dashboard";
@@ -62,6 +62,9 @@ function AppLayout() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/space-analysis" element={<ARBalconyScanner />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        
+        {/* Fallback Route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster position="bottom-right" theme="dark" />
     </div>

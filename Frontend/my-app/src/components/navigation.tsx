@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "motion/react";
 import { Leaf, Menu, X, Play, UserCircle2, LogOut, Users, Sparkles, Camera, Trophy, LayoutDashboard, Sprout, ShoppingCart, ChevronRight, Languages, ShieldCheck } from "lucide-react";
