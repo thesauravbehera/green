@@ -28,13 +28,9 @@ import { Planner } from "./pages/Planner";
 import { AIAssistant } from "./pages/AIAssistant";
 
 function AppLayout() {
-  const location = useLocation();
-  const hideNavRoutes = ['/dashboard', '/my-garden', '/ai-assistant', '/onboarding'];
-  const shouldHideNav = hideNavRoutes.includes(location.pathname);
-
   return (
     <div className="min-h-screen bg-[#020617]">
-      {!shouldHideNav && <Navigation />}
+      <Navigation />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />

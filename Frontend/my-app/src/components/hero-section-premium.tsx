@@ -24,34 +24,6 @@ export function HeroSectionPremium() {
         />
       </video>
 
-      {/* Floating Navigation Bar */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="absolute top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-[16px] px-6 py-4 flex items-center justify-between z-50 shadow-2xl"
-      >
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-           <Leaf className="w-6 h-6 text-white drop-shadow-md" />
-           <span className="text-xl font-bold text-white font-['Barlow'] tracking-tight drop-shadow-md">Bloomify</span>
-        </div>
-        <div className="hidden md:flex gap-8 text-[14px] text-white font-['Barlow'] font-medium drop-shadow-md">
-           <button onClick={() => navigate('/dashboard')} className="hover:text-emerald-300 transition-colors drop-shadow-md">Dashboard</button>
-           <button onClick={() => navigate('/my-garden')} className="hover:text-emerald-300 transition-colors drop-shadow-md">My Garden</button>
-           <button onClick={() => navigate('/ai-assistant')} className="hover:text-emerald-300 transition-colors drop-shadow-md">AI Assistant</button>
-           <button onClick={() => navigate('/community')} className="hover:text-emerald-300 transition-colors drop-shadow-md">Community</button>
-        </div>
-        <button 
-          className="bg-[#222] text-white px-5 py-2.5 rounded-full text-sm font-['Barlow'] font-medium flex items-center gap-3 hover:bg-black transition-colors shadow-lg"
-          onClick={() => navigate(userLoggedIn ? '/dashboard' : '/signup')}
-        >
-           Start your Garden
-           <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center">
-             <ArrowUpRight className="w-3 h-3 text-white" />
-           </div>
-        </button>
-      </motion.div>
-
       {/* Hero Content */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 mt-20">
         <motion.h1 
