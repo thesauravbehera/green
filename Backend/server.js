@@ -13,10 +13,12 @@ require('dotenv').config();  // Load environment variables
 let subscription = require("./subscription");  // Subscription management
 let ecommerce = require("./ecommerce");  // E-commerce management
 let recommendRouter = require("./routes/recommend");  // Plant recommendation routes
+let chatRouter = require("./routes/chat");  // AI Chat routes
 
 let app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/api', chatRouter);
 app.use('/upload', express.static('upload'));
 
 // Request logging middleware

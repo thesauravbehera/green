@@ -133,90 +133,27 @@ export function ARBalconyScanner() {
     }
   };
 
-  // Scanning and API Call Integration
+  // Scanning simulation with progress
   useEffect(() => {
-    let isCancelled = false;
-
-    const performAnalysis = async () => {
-      if (isScanning && videoRef.current && canvasRef.current) {
-        try {
-          // 1. Capture frame
-          const video = videoRef.current;
-          const canvas = document.createElement('canvas');
-          canvas.width = video.videoWidth || 640;
-          canvas.height = video.videoHeight || 480;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          }
-
-          // 2. Convert to Blob
-          const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.8));
-          if (!blob) throw new Error("Failed to capture image");
-
-          // Animate progress to 50% while waiting
-          setScanProgress(50);
-
-          // 3. Send to API
-          const formData = new FormData();
-          formData.append('image', blob, 'scan.jpg');
-          // Mock email for now. In production, use AuthContext.
-          formData.append('email', 'demo@bloomify.com'); 
-
-          const response = await fetch('http://localhost:3000/analyze-space', {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await response.json();
-
-          if (!isCancelled) {
-            if (!response.ok || data.error) {
-              setCameraError(data.message || data.error || "Analysis failed");
-              setIsScanning(false);
-              return;
-            }
-
-            setScanProgress(100);
+    if (isScanning && scanProgress < 100) {
+      const interval = setInterval(() => {
+        setScanProgress(prev => {
+          const next = prev + 2;
+          if (next >= 100) {
             setScanComplete(true);
-            
-            // Map backend data to UI
-            // Assuming lighting level determines sunlight, space_features determines space
-            let sunlightVal = 50;
-            if (data.lighting?.level === 'high') sunlightVal = 90;
-            else if (data.lighting?.level === 'medium') sunlightVal = 60;
-            else sunlightVal = 30;
-
-            let spaceVal = 50;
-            if (data.space_features?.available_space === 'excellent') spaceVal = 90;
-            else if (data.space_features?.available_space === 'good') spaceVal = 70;
-
             setEnvironmentData({
-              sunlight: sunlightVal,
-              space: spaceVal,
-              airflow: data.space_score || 50 // Mapping space_score to airflow/overall score
+              sunlight: Math.floor(Math.random() * 30) + 70,
+              space: Math.floor(Math.random() * 25) + 75,
+              airflow: Math.floor(Math.random() * 20) + 60
             });
-            
-            // Note: In a full implementation, you would save data.recommended_plants to state here
+            return 100;
           }
-        } catch (error) {
-          if (!isCancelled) {
-            console.error("Analysis error:", error);
-            setCameraError("Failed to connect to analysis server.");
-            setIsScanning(false);
-          }
-        }
-      }
-    };
-
-    if (isScanning && !scanComplete) {
-      performAnalysis();
+          return next;
+        });
+      }, 100);
+      return () => clearInterval(interval);
     }
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [isScanning, scanComplete]);
+  }, [isScanning, scanProgress]);
 
   // Draw AR overlay on canvas
   useEffect(() => {
@@ -307,9 +244,8 @@ export function ARBalconyScanner() {
     if (!isCameraActive) {
       startCamera();
     }
-    setCameraError(null);
     setIsScanning(true);
-    setScanProgress(10); // Initial progress
+    setScanProgress(0);
     setScanComplete(false);
     setEnvironmentData({ sunlight: 0, space: 0, airflow: 0 });
   };
@@ -318,7 +254,6 @@ export function ARBalconyScanner() {
     setIsScanning(false);
     setScanProgress(0);
     setScanComplete(false);
-    setCameraError(null);
     setEnvironmentData({ sunlight: 0, space: 0, airflow: 0 });
   };
 
