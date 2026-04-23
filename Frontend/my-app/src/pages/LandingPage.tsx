@@ -10,6 +10,7 @@ import { InteractiveDemoSection } from "../components/interactive-demo-section";
 import { LevelsSection } from "../components/LevelsSection";
 import { Footer } from "../components/footer";
 import { FloatingUserStation } from "../components/FloatingUserStation";
+import { Navigation } from "../components/navigation";
 
 export function LandingPage() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);

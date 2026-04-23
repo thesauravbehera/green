@@ -92,29 +92,6 @@ export function HeroSectionPremium() {
         />
       </video>
 
-      {/* Navbar overlay */}
-      <div className="relative z-10 w-full px-6 md:px-12 lg:px-16 pt-6">
-        <div className="liquid-glass rounded-xl px-4 py-2 flex items-center justify-between">
-          <div className="text-2xl font-semibold tracking-tight text-white">
-            VEX
-          </div>
-          <div className="hidden md:flex gap-8 text-sm text-white">
-            <a href="#" className="hover:text-gray-300 transition-colors">Story</a>
-            <a href="#" className="hover:text-gray-300 transition-colors">Investing</a>
-            <a href="#" className="hover:text-gray-300 transition-colors">Building</a>
-            <a href="#" className="hover:text-gray-300 transition-colors">Advisory</a>
-          </div>
-          <div>
-            <button 
-              className="bg-white text-black px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
-              onClick={() => navigate(userLoggedIn ? "/dashboard" : "/signup")}
-            >
-              Start a Chat
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content pushed to bottom */}
       <div className="relative z-10 w-full px-6 md:px-12 lg:px-16 pb-12 lg:pb-16 flex-1 flex flex-col justify-end">
         <div className="lg:grid lg:grid-cols-2 lg:items-end w-full">
@@ -122,7 +99,7 @@ export function HeroSectionPremium() {
           {/* Left Column */}
           <div className="mb-8 lg:mb-0">
             <AnimatedHeading
-              text="Shaping tomorrow\nwith vision and action."
+              text={"Shaping tomorrow\nwith vision and action."}
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal text-white mb-4"
             />
 
