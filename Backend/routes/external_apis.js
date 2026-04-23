@@ -16,8 +16,11 @@ router.get('/perenual/species', async (req, res) => {
   try {
     const page = req.query.page || 1;
     const q = req.query.q || '';
+    const indoor = req.query.indoor; // 1 for indoor, 0 for outdoor
+    
     let url = `https://perenual.com/api/species-list?key=${PERENUAL_API_KEY}&page=${page}`;
     if (q) url += `&q=${q}`;
+    if (indoor !== undefined) url += `&indoor=${indoor}`;
     
     const response = await axios.get(url);
     res.json(response.data);

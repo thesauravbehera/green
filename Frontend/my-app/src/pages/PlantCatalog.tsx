@@ -19,6 +19,8 @@ interface Plant {
   description: string;
   isPremium?: boolean;
   isIndian?: boolean;
+  isIndoor?: boolean;
+  isOutdoor?: boolean;
   price?: number;
 }
 
@@ -34,6 +36,7 @@ const MOCK_PLANTS: Plant[] = [
     image: 'https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?w=400&h=400&fit=crop',
     description: 'Sacred Indian herb with medicinal properties',
     isIndian: true,
+    isOutdoor: true,
   },
   {
     id: '2',
@@ -46,6 +49,7 @@ const MOCK_PLANTS: Plant[] = [
     image: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=400&h=400&fit=crop',
     description: 'Iconic tropical plant with split leaves',
     isPremium: true,
+    isIndoor: true,
   },
   {
     id: '3',
@@ -57,6 +61,7 @@ const MOCK_PLANTS: Plant[] = [
     water: 'Low',
     image: 'https://images.unsplash.com/photo-1593482892540-73c6e536b081?w=400&h=400&fit=crop',
     description: 'Air-purifying succulent, extremely hardy',
+    isIndoor: true,
   },
   {
     id: '4',
@@ -69,6 +74,7 @@ const MOCK_PLANTS: Plant[] = [
     image: 'https://images.unsplash.com/photo-1595423498634-01a29848e6a6?w=400&h=400&fit=crop',
     description: 'Vibrant flowers, natural pest deterrent',
     isIndian: true,
+    isOutdoor: true,
   },
   {
     id: '5',
@@ -80,6 +86,7 @@ const MOCK_PLANTS: Plant[] = [
     water: 'Moderate',
     image: 'https://images.unsplash.com/photo-1614594895304-fe7116ac3b58?w=400&h=400&fit=crop',
     description: 'Dramatic large-leafed statement plant',
+    isIndoor: true,
   },
   {
     id: '6',
@@ -92,6 +99,8 @@ const MOCK_PLANTS: Plant[] = [
     image: 'https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=400&h=400&fit=crop',
     description: 'Medicinal succulent with healing gel',
     isIndian: true,
+    isIndoor: true,
+    isOutdoor: true,
   },
   {
     id: '7',
@@ -104,6 +113,7 @@ const MOCK_PLANTS: Plant[] = [
     image: 'https://images.unsplash.com/photo-1629815884972-ddc0ebfd7d73?w=400&h=400&fit=crop',
     description: 'Fragrant white flowers, Indian favorite',
     isIndian: true,
+    isOutdoor: true,
   },
   {
     id: '8',
@@ -115,16 +125,17 @@ const MOCK_PLANTS: Plant[] = [
     water: 'High',
     image: 'https://images.unsplash.com/photo-1593482892540-73c6e536b081?w=400&h=400&fit=crop',
     description: 'Elegant white blooms, air purifying',
+    isIndoor: true,
   },
 ];
 
 const CATEGORIES = [
   { id: 'all', label: 'All Plants', icon: Trees },
+  { id: 'indoor', label: 'Indoor', icon: Home },
+  { id: 'outdoor', label: 'Outdoor', icon: Sun },
   { id: 'herbs', label: 'Herbs', icon: Leaf },
   { id: 'foliage', label: 'Foliage', icon: Sprout },
-  { id: 'flowering', label: 'Flowering', icon: Heart },
   { id: 'succulent', label: 'Succulents', icon: Sun },
-  { id: 'indian', label: 'Indian Plants', icon: Home },
 ];
 
 export const PlantCatalog = () => {
@@ -137,9 +148,18 @@ export const PlantCatalog = () => {
   const filteredPlants = MOCK_PLANTS.filter(plant => {
     const matchesSearch = plant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          plant.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || 
-                           plant.category.toLowerCase() === selectedCategory ||
-                           (selectedCategory === 'indian' && plant.isIndian);
+    
+    let matchesCategory = true;
+    if (selectedCategory !== 'all') {
+      if (selectedCategory === 'indoor') {
+        matchesCategory = !!plant.isIndoor;
+      } else if (selectedCategory === 'outdoor') {
+        matchesCategory = !!plant.isOutdoor;
+      } else {
+        matchesCategory = plant.category.toLowerCase() === selectedCategory;
+      }
+    }
+
     const matchesDifficulty = !selectedDifficulty || plant.difficulty === selectedDifficulty;
     
     return matchesSearch && matchesCategory && matchesDifficulty;
