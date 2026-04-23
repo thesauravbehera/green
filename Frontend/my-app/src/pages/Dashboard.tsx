@@ -57,7 +57,8 @@ export function Dashboard() {
           >
             <p className="text-emerald-500 font-black uppercase tracking-[0.4em] text-[10px] mb-3">COMMAND TERMINAL v4.0</p>
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter font-['Clash_Display'] leading-none">
-              SALUTATIONS, <span className="text-emerald-400 uppercase">{currentUser?.displayName?.split(' ')[0] || 'GUEST'}</span>
+              SALUTATIONS, <br/>
+              <span className="bg-gradient-to-r from-emerald-400 to-blue-500 text-transparent bg-clip-text uppercase">NEXUS</span>
             </h1>
           </motion.div>
           
@@ -140,6 +141,14 @@ export function Dashboard() {
                         frameBorder="0"
                       />
                       <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80" />
+                      
+                      {/* Play Button Overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500 group-hover:opacity-0">
+                        <div className="w-16 h-16 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20">
+                           <div className="w-0 h-0 border-y-8 border-y-transparent border-l-12 border-l-white ml-1 opacity-80" />
+                        </div>
+                      </div>
+
                       <div className="absolute bottom-8 left-8 right-8">
                         <p className="text-[10px] font-black text-emerald-500 tracking-[0.3em] mb-2 uppercase">UNIT ID: {idx + 104}</p>
                         <p className="text-lg font-bold tracking-tighter mb-4 font-['Clash_Display']">{plant.name}</p>
@@ -188,7 +197,7 @@ export function Dashboard() {
                 </div>
               </div>
               
-              <Button className="w-full py-8 rounded-[1.5rem] bg-white text-black font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-white/5">
+              <Button className="w-full py-8 rounded-[1.5rem] bg-emerald-500 hover:bg-emerald-400 text-[#020617] font-black uppercase tracking-[0.2em] text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-emerald-500/20">
                 SYNCHRONIZE DAILY
               </Button>
             </Card>
